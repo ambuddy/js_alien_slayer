@@ -1,0 +1,67 @@
+﻿{
+	"configs" : {
+		"debug" :               false,
+		"allowFullWindow" :		false,
+		"width" :				800,
+		"height" :				600,
+		"safe_border" :			200,
+		"world_width" :			2000,
+		"world_height" :		2000,
+		"map_lat" :				36.136817,			"geo" : "Nashville, TN, USA",
+		"map_lng" :				-86.7350286,
+	
+		"shadowsOn" : 			false,
+		"loadedAfterWaitTime" :	1000
+	},
+	
+	"levels" : [
+		{ "world":[1000, 1000],	"geo":[36.136817,-86.7350286],	"enemies":[1],		"enemiesNum":1,		"weapons":[1],			"briefing":"Allright, son. This is your very first try and you'll meet one of our friends from faraway. \nDon't be so scared it doesn't bite, just try to blow its brains out." },
+		{ "world":[1000, 1000],	"geo":[33.3695756,-111.8192001],"enemies":[1,2],	"enemiesNum":3,		"weapons":[1,2,3],		"briefing":"Today, son, you will face a couple of those motherfuckers.\nPlease, don't fuck up your $1 mln helicopter." },
+		{ "world":[1600, 1600],	"geo":[33.8662537,-118.0994789],"enemies":[1,2,3],	"enemiesNum":10,	"weapons":[1,2,3,4],	"briefing":"Ok, %pilotName%y. Hope you've seen your girlfriend yesterday's night over Skype because that maybe the last time you saw her. \nBe prepared for the real massacre!" },
+		{ "world":[2000, 2000],	"geo":[36.117226,-115.1743284],	"enemies":[1,2,3],	"enemiesNum":30,	"weapons":[1,2,3,4,5],	"briefing":"Next morning, %pilotName%, you are going to Vegas! \nDon't lose too much money and your 'bird' while kicking their asses." }
+	],
+	
+	"scripts" : [
+		"https://maps.googleapis.com/maps/api/js?key=AIzaSyDOcpCtOlY1V3mqzDkeMNY2F99eFO6CTr0",
+		"libs/phaser.js",
+		"js/Map.js",
+		"js/Game.js",
+		"js/EventDispatcher.js",
+		"js/UI.js",
+		"js/Cursor.js",
+		"js/states/State.js",
+		"js/states/BootState.js",
+		"js/states/PreloadState.js",
+		"js/states/LevelIntro.js",
+		"js/states/MainState.js",
+		"js/unit/Unit.js",
+		"js/unit/Alien.js",
+		"js/unit/Helicopter.js",
+		"js/weapon/Weapon.js",
+		"js/weapon/Bullet.js",
+		"js/weapon/Rocket.js"
+	],
+	
+	"resources" : [
+
+		{ "type":"spritesheet",		"name":"explosion1",	"src":"res/explosion1.png",	"size":[256, 256] },
+		{ "type":"spritesheet",		"name":"heli_vint",		"src":"res/vint_sheet.png",	"size":[118, 80] },
+		{ "type":"spritesheet",		"name":"guns",			"src":"res/guns.png",		"size":[64, 32] },
+		
+		{ "type":"atlasJSONArray",	"name":"heli",			"src":"res/heli.png",		"json":"res/heli.json" },
+		{ "type":"atlasJSONArray",	"name":"alien1",		"src":"res/alien1.png",		"json":"res/alien1.json" },
+		{ "type":"atlasJSONArray",	"name":"alien2",		"src":"res/alien2.png",		"json":"res/alien2.json" },
+		{ "type":"atlasJSONArray",	"name":"alien3",		"src":"res/alien3.png",		"json":"res/alien3.json" },
+		
+		{ "type":"atlasJSONHash",	"name":"sprites",		"src":"res/sprites.png",	"json":"res/sprites.json" },
+		
+		{ "type":"audio",			"name":"heli_fly",		"src":["res/sound/heli_fly.ogg",	"res/sound/heli_fly.mp3"] },
+		{ "type":"audio",			"name":"gun",			"src":["res/sound/gun.ogg",			"res/sound/gun.mp3"] },
+		{ "type":"audio",			"name":"machine_gun",	"src":["res/sound/machine_gun.ogg", "res/sound/machine_gun.mp3"] },
+		{ "type":"audio",			"name":"rocket_launch",	"src":["res/sound/rocket_launch.ogg", "res/sound/rocket_launch.mp3"] },
+		{ "type":"audio",			"name":"explosion1",	"src":["res/sound/explosion1.ogg",	"res/sound/explosion1.mp3"] },
+		{ "type":"audiosprite",		"name":"metall",		"src":["res/sound/metall.ogg", 		"res/sound/metall.mp3"],	"json":{ "spritemap": {"hit1":{"start":0.2, "end":0.5, "loop":false}, "hit2":{"start":0.8, "end":1.1, "loop":false}} } }
+	]
+	
+}
+

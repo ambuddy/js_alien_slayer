@@ -1,0 +1,14 @@
+﻿{
+    "spritemap": {
+        "hit1": {
+			"start": 0.068,
+			"end": 0.362,
+			"loop": false
+		}, 
+		"hit2": {
+			"start": 0.362,
+			"end": 0.575,
+			"loop": false
+		}
+    }
+}
