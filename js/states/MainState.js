@@ -11,7 +11,9 @@ function MainState(map) {
 
 MainState.prototype = Object.create(State.prototype);
 MainState.prototype.constructor = MainState;
-
+/*
+ * @override
+ */
 MainState.prototype.create = function() {
 	//console.log("MainState.prototype.create");
 	this.levelConfig = Game.levelsConfigs[Game.currentLevel];
@@ -45,7 +47,9 @@ MainState.prototype.create = function() {
 		this.aliens.push(enemy );
 	}
 }
-
+/*
+ * @override
+ */
 MainState.prototype.update = function() {
 	
 	this.ui.update();
@@ -58,20 +62,41 @@ MainState.prototype.update = function() {
 		}
 	});
 }
-
-MainState.prototype.endLevel = function(event) {
-	setTimeout(function() {
-		Game.currentLevel++;
-		this.destroyChildren();
-		this.state.start('LevelIntro');
-	}.bind(this), 1000);
+/*
+ * @override
+ */
+MainState.prototype.render = function() {
+	var dbg = this.game.debug;
+	dbg.text(this.game.time.fps, 400, 16, "#00ff00");
+	if( Game.debug ) {
+		dbg.text("Heli x|y: " + this.heli.cont.x + "|" + this.heli.cont.y, 2, 32);
+		dbg.text("deltaCam x|y: " + (this.camera.view.x - this.camera.preXY.x) + " | " + (this.camera.view.y - this.camera.preXY.y), 2, 48);
+		dbg.cameraInfo(this.camera, 2, 96);
+		//dbg.text("angle: " + degToDir(angle) , 16, 48);
+	}
 }
-MainState.prototype.destroyChildren = function(event) {
+/*
+ * @override
+ */
+MainState.prototype.shutdown = function(event) {
 	this.aliens.forEach( function(alien, i, arr) {
 		alien.destroy();
 	});
 	this.heli.destroy();
 	this.heli.removeEventListener(Unit.MOVED, this.panMapOnCameraMove, this);
+}
+
+/*
+ * ===============================================
+ * own methods : 
+ */
+
+MainState.prototype.endLevel = function(event) {
+	setTimeout(function() {
+		//this.destroyChildren();
+		Game.currentLevel++;
+		this.state.start('LevelIntro', true, false, true);
+	}.bind(this), 1000);
 }
 
 MainState.prototype.onKeyReleased = function(event) {
@@ -108,17 +133,6 @@ MainState.prototype.onUnitKilled = function(event) {
 	
 	if(this.aliens.length <= 0) {
 		this.endLevel();
-	}
-}
-
-MainState.prototype.render = function() {
-	var dbg = this.game.debug;
-	dbg.text(this.game.time.fps, 400, 16, "#00ff00");
-	if( Game.debug ) {
-		dbg.text("Heli x|y: " + this.heli.cont.x + "|" + this.heli.cont.y, 2, 32);
-		dbg.text("deltaCam x|y: " + (this.camera.view.x - this.camera.preXY.x) + " | " + (this.camera.view.y - this.camera.preXY.y), 2, 48);
-		dbg.cameraInfo(this.camera, 2, 96);
-		//dbg.text("angle: " + degToDir(angle) , 16, 48);
 	}
 }
 
