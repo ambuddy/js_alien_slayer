@@ -11,7 +11,7 @@ LevelIntro.prototype.constructor = LevelIntro;
  * @thisIsOutro:Boolean, if true this state is the End Level popup
  */
 LevelIntro.prototype.init = function(thisIsOutro, lose) {
-	console.log("LevelIntro.prototype.init: thisIsOutro, lose:", thisIsOutro, lose);
+	console.log("LevelIntro.init: thisIsOutro, lose:", thisIsOutro, lose);
 	this.thisIsOutro = thisIsOutro;
 	this.lose = lose;
 }
@@ -48,12 +48,16 @@ LevelIntro.prototype.create = function() {
 	
 	var text3 = this.add.text(Game.width/2, Game.height - 50, "Press SPACE to continue...", { font:"bold 12pt Arial", fill:"#FFF", align:'center' });
 	text3.anchor.set(0.5);
+	text3.inputEnabled = true;
+	text3.events.onInputDown.add(this.onAnyKey, this);
 	bg.addChild(text3);
 	
 	if(this.lose) {
 		text1.text = Game.loseString.split("%pilotName%").join(Game.pilotName);
 		text1.fill = 'black';
-		this.snd = this.game.add.audio('trololo');
+		if(!this.snd) {
+			this.snd = this.game.add.audio('trololo');
+		}
 		this.snd.play("", 0, 0.7, true);
 		
 		var strp = this.game.add.graphics(Game.width-230, Game.height);
@@ -65,15 +69,12 @@ LevelIntro.prototype.create = function() {
 }
 
 LevelIntro.prototype.onAnyKey = function(event) {
+	//console.log("LevelIntro.prototype.onAnyKey", event);
+	if(event.code != "Space" && !event.text) return;
 	
-	if(event.code != "Space") return;
-	
-	if(this.snd) this.snd.destroy();
+	this.clear();
 	
 	if(this.thisIsOutro) {
-		if(this.lose) {
-			Game.currentLevel = 0;		// рестарт
-		}
 		this.state.restart();
 	} else {
 		var tween = this.game.add.tween(this.bg).to( {alpha:0}, 200, "Linear", true );
@@ -83,5 +84,13 @@ LevelIntro.prototype.onAnyKey = function(event) {
 	}
 }
 
-
+/*
+ * @override
+ */
+LevelIntro.prototype.clear = function(event) {
+	console.log("LevelIntro.clear", this.snd);
+	if(this.snd) {
+		this.snd.stop();
+	}
+}
 

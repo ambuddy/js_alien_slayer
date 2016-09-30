@@ -94,11 +94,14 @@ MainState.prototype.shutdown = function(event) {
  * own methods : 
  */
 
-MainState.prototype.endLevel = function(event) {
+MainState.prototype.endLevel = function() {
+	console.log("MainState.endLevel");
 	this.endingLevel = true;
 	setTimeout(function() {
 		//this.destroyChildren();
-		Game.currentLevel++;
+		if(this.heli.exists()) Game.currentLevel++;
+		var ls = LocalStorage();
+		ls.save('currentLevel', Game.currentLevel);
 		this.state.start('LevelIntro', true, false, true, !this.heli.exists());
 	}.bind(this), 1500);
 }
@@ -113,7 +116,8 @@ MainState.prototype.onKeyReleased = function(event) {
 }
 
 MainState.prototype.onUnitKilled = function(event) {
-	if(Game.debug) console.log("MainState.onUnitKilled", event);
+	//if(Game.debug) 
+	console.log("MainState.onUnitKilled", event);
 	event.target.removeEventListener(Unit.KILLED, this.onUnitKilled, this);
 
 	var expl = this.game.add.image(0, 0, 'explosion1', null, this.cont);

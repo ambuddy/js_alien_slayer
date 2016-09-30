@@ -6,7 +6,7 @@ function Alien(state, type) {
 	this.type = type;
 	this.heli = state.heli;	//console.log('Alien.this.heli = ', this.heli);
 	
-	this.speed = Math.min(5, Game.currentLevel+1);
+	this.speed = Math.min(3, Game.currentLevel+1);
 	
 	this.cont = this.game.add.group( state.cont );
 	this.cont.parentClass = "Alien "+type;
@@ -54,17 +54,17 @@ Alien.prototype.update = function () {
 		}
 	}
 	
-	if(this.life < 1500) {
+	if(distToHeli < 800 && distToHeli > 50) {
 		this.moveTo(this.heli.cont);
-	}
-	
-	if(this.life < 100) {
-		this.updateLifeBar();
 	}
 	
 	if( distToHeli < 400 ) {
 		//console.log("Alien.update", this.weapon);
 		this.weapon.fire();
+	}
+	
+	if(this.life < 100) {
+		this.updateLifeBar();
 	}
 	
 	this.weapon.update();

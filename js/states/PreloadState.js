@@ -43,8 +43,8 @@ PreloadState.prototype.preload = function () {
 	}
 	this.doneNaming = true;
 	
-	Game.pilotName = ls.get('name'); 											console.log( "Game.pilotName:", Game.pilotName );
-	Game.currentLevel = 0;ls.get('currentLevel') ? ls.get('currentLevel') : 0;	console.log( "Game.currentLevel:", Game.currentLevel );
+	Game.pilotName = ls.get('name'); 													console.log( "Game.pilotName:", Game.pilotName );
+	Game.currentLevel = ls.get('currentLevel') ? Number(ls.get('currentLevel')) : 0;	console.log( "Game.currentLevel:", Game.currentLevel );
 	
 	this.checkWeCanStart();
 }
