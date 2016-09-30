@@ -37,13 +37,15 @@ function UI(state, weapons) {
 	this.gunFrame.lineStyle(1, 0x06F900);
 	this.gunFrame.drawRect(24, 1, picGun.width+2, picGun.height+2);
 	
-	this.statTxt = this.game.add.text(Game.width - 80, 10, "Aliens: "+10, { font:"bold 10pt Arial", fill:"#FFF", align:'right' });
+	this.statTxt1 = this.game.add.text(Game.width - 150, 10, "Life: "+10, { font:"bold 10pt Arial", fill:"#FFF", align:'right' });
+	this.statTxt2 = this.game.add.text(Game.width - 80, 10, "Aliens: "+10, { font:"bold 10pt Arial", fill:"#FFF", align:'right' });
 	
 	this.cont.addChild(bg);
 	this.cont.addChild(plate);
 	this.cont.addChild(this.guns);
 	this.cont.addChild(this.gunFrame);
-	this.cont.addChild(this.statTxt);
+	this.cont.addChild(this.statTxt1);
+	this.cont.addChild(this.statTxt2);
 }
 
 UI.prototype = Object.create(EventDispatcher.prototype);
@@ -51,7 +53,8 @@ UI.prototype.constructor = UI;
 
 UI.prototype.update = function() {
 	this.updateKeys();
-	this.statTxt.text = "Aliens: "+this.state.aliens.length;
+	this.statTxt1.text = "Life: "+this.state.heli.life;
+	this.statTxt2.text = "Aliens: "+this.state.aliens.length;
 }
 
 UI.prototype.setGunFrame = function() {

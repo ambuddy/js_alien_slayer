@@ -6,7 +6,10 @@ function Alien(state, type) {
 	this.type = type;
 	this.heli = state.heli;	//console.log('Alien.this.heli = ', this.heli);
 	
+	this.speed = Math.min(5, Game.currentLevel+1);
+	
 	this.cont = this.game.add.group( state.cont );
+	this.cont.parentClass = "Alien "+type;
 	this.cont.x = this.game.rnd.between( Game.safe_border*2, this.state.levelConfig.world[0] - Game.safe_border*2 );
 	this.cont.y = this.game.rnd.between( Game.safe_border*2, this.state.levelConfig.world[1] - Game.safe_border*2 );
 	
@@ -24,7 +27,9 @@ function Alien(state, type) {
 		this.shadow.alpha = 0.3;
 		this.cont.addChild(this.shadow);
 	}
-		
+	
+	this.weapon = new PlasmaGun(this.state, this.cont)
+	
 	this.cont.addChild(this.body);
 	
 	this.addHitArea({width:50, height:50});
@@ -37,16 +42,31 @@ Alien.prototype.constructor = Alien;
 
 Alien.prototype.update = function () {
 	
-	var angle = this.game.math.radToDeg( this.game.physics.arcade.angleBetween(this.cont, this.heli.cont) );
+	var distToHeli = this.distanceBetween(this.cont, this.heli.cont);
 	
-	this.body.frame = this.degToFrame( angle );
+	if( distToHeli < 800 ) {
+		var angle = this.angleBetween(this.cont, this.heli.cont);
+		
+		this.body.frame = this.degToFrame( angle );
+		
+		if(this.shadow) {
+			this.shadow.frame = this.degToFrame( angle );
+		}
+	}
 	
-	if(this.shadow) {
-		this.shadow.frame = this.degToFrame( angle );
+	if(this.life < 1500) {
+		this.moveTo(this.heli.cont);
 	}
 	
 	if(this.life < 100) {
 		this.updateLifeBar();
 	}
+	
+	if( distToHeli < 400 ) {
+		//console.log("Alien.update", this.weapon);
+		this.weapon.fire();
+	}
+	
+	this.weapon.update();
 }
 

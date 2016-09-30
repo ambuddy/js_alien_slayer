@@ -18,10 +18,14 @@ LevelIntro.prototype.init = function(thisIsOutro, lose) {
 
 LevelIntro.prototype.create = function() {
 	
-	if(Game.currentLevel > Game.levelsConfigs.length-1) Game.levelsConfigs--;
+	if(Game.currentLevel > Game.levelsConfigs.length-1) Game.currentLevel--;
 	this.levelConfig = Game.levelsConfigs[Game.currentLevel];
 	
-	this.map.setCenter({lat:this.levelConfig.geo[0] , lng:this.levelConfig.geo[1]});
+	this.map.setCenter({lat:this.levelConfig.geo[0], lng:this.levelConfig.geo[1]});
+	this.map.setZoom(this.levelConfig.geo[2]);
+	
+	this.game.input.keyboard.onUpCallback = this.onAnyKey.bind(this);
+	//this.game.input.mouse.mouseUpCallback = this.onAnyKey.bind(this);
 	
 	var bg = this.add.tileSprite(0, 0, Game.width, Game.height, 'bg_pattern');
 	this.bg = bg;
@@ -42,18 +46,15 @@ LevelIntro.prototype.create = function() {
 		text1.y = Game.height/2 - 50;
 	}
 	
-	var text3 = this.add.text(Game.width/2, Game.height - 50, "Press any key to continue...", { font:"bold 12pt Arial", fill:"#FFF", align:'center' });
+	var text3 = this.add.text(Game.width/2, Game.height - 50, "Press SPACE to continue...", { font:"bold 12pt Arial", fill:"#FFF", align:'center' });
 	text3.anchor.set(0.5);
 	bg.addChild(text3);
-
-	if(!this.lose) {
-		this.game.input.keyboard.onUpCallback = this.onAnyKey.bind(this);
-		this.game.input.mouse.mouseUpCallback = this.onAnyKey.bind(this);
-	} else {
+	
+	if(this.lose) {
 		text1.text = Game.loseString.split("%pilotName%").join(Game.pilotName);
 		text1.fill = 'black';
-		var snd = this.game.add.audio('trololo');
-		snd.play("", 0, 0.7, true);
+		this.snd = this.game.add.audio('trololo');
+		this.snd.play("", 0, 0.7, true);
 		
 		var strp = this.game.add.graphics(Game.width-230, Game.height);
 		strp.beginFill(0x000000);
@@ -63,8 +64,16 @@ LevelIntro.prototype.create = function() {
 	}
 }
 
-LevelIntro.prototype.onAnyKey = function() {
+LevelIntro.prototype.onAnyKey = function(event) {
+	
+	if(event.code != "Space") return;
+	
+	if(this.snd) this.snd.destroy();
+	
 	if(this.thisIsOutro) {
+		if(this.lose) {
+			Game.currentLevel = 0;		// рестарт
+		}
 		this.state.restart();
 	} else {
 		var tween = this.game.add.tween(this.bg).to( {alpha:0}, 200, "Linear", true );

@@ -26,5 +26,8 @@ GoogleMap.prototype.show = function(param) {
 }
 
 GoogleMap.prototype.setCenter = function(param) {
-	this.map.setCenter(param);
+	if(param) this.map.setCenter(param);
+}
+GoogleMap.prototype.setZoom = function(param) {
+	if(param) this.map.setZoom(param);
 }

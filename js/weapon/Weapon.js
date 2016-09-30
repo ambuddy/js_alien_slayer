@@ -9,7 +9,7 @@ function Weapon(state, shooter) {
 	this.time = 0;
 	this.waitingNextFireTrigger = false;
 	this.bullets = [];
-	
+	this.damage = 10;
 	this.weaken = true;				// чем дальше летит пуля, тем слабее ее урон (true) | на любом расстоянии макс.урон (false)
 	
 	//this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -23,7 +23,7 @@ Weapon.prototype.onMouseRelease = function(event) {
 }
 
 Weapon.prototype.update = function () {
-	
+	//console.log("Weapon.update", this.shooter.parentClass, this.game.time.now);
 	this.time = this.game.time.now;
 	
 	this.bullets.forEach( function(bullet, i) {
@@ -36,11 +36,11 @@ Weapon.prototype.update = function () {
 }
 
 Weapon.prototype.fire = function () {
-	
+	//console.log("Weapon.fire 1", this.shooter.parentClass);
 	if( !this.automatic && this.waitingNextFireTrigger ) {
 		return;
 	}
-	
+	//console.log("Weapon.fire 2", this.shooter.parentClass, this.time, this.nextFire);
 	if( this.time > this.nextFire ) {
 		this.nextFire = this.time + this.fireRate;
 		this.waitingNextFireTrigger = true;
@@ -50,7 +50,7 @@ Weapon.prototype.fire = function () {
 
 Weapon.prototype.fireOnce = function () {
 	
-	if( Game.debug ) console.log("FIRE");
+	if( Game.debug ) console.log("FIRE", this.shooter.parentClass);
 
 	var bullet = new Bullet(this.state, this.shooter, this);
 	
@@ -172,7 +172,7 @@ RocketLauncher.prototype.fireOnce = function () {
 }
 
 /*
- * RocketLauncher
+ * Rocket Launcher Autofire
  */
 function RocketLauncherAuto(state, shooter) {
 	
@@ -190,3 +190,40 @@ RocketLauncherAuto.prototype = Object.create(RocketLauncher.prototype);
 RocketLauncherAuto.prototype.constructor = RocketLauncherAuto;
 
 
+
+/*
+ * Plasma Gun
+ */
+function PlasmaGun(state, shooter) {
+	
+	Weapon.apply(this, arguments);
+	
+	this.fireRate = 300;		// минимальное время до следующего выстрела;
+	this.automatic = true;		// автоматическое оружие стреляет пока нажата кнопка мыши;
+	this.distance = 600;		// дальность;
+	this.razbrosY = 5;			// кучность - градус отклонения от прямой линии в обе стороны;
+	this.razbrosX = 100;		// разброс по дальности;
+	this.damage = 5;
+	
+	if(Game.currentLevel <= 2) {
+		this.fireRate = 600;
+		this.damage = 2;
+	}
+	
+	this.sounds = {
+		shot: this.game.add.audio('gun')
+	};
+}
+PlasmaGun.prototype = Object.create(Weapon.prototype);
+PlasmaGun.prototype.constructor = PlasmaGun;
+
+PlasmaGun.prototype.fireOnce = function () {
+	
+	if( Game.debug ) console.log("Alien FIRE");
+
+	var bullet = new Plasma(this.state, this.shooter, this);
+	
+	this.bullets.push(bullet);
+	
+	this.sounds.shot.play("", 0, 0.1);
+}

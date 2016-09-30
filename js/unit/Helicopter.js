@@ -9,6 +9,7 @@ function Helicopter(state, weapons, currentWeapon) {
 	this.speed2 = 10;
 	
 	this.cont = this.game.add.group( state.cont );
+	this.cont.parentClass = "Helicopter";
 	this.cont.x = 300;
 	this.cont.y = 200;
 	
@@ -64,7 +65,7 @@ Helicopter.prototype.update = function () {
 	
 	this.checkKeys();
 	
-	if( this.ui.isDown.mouse ) {
+	if( this.ui.isDown.mouse && !this.state.endingLevel ) {
 		//console.log("Helicopter.update", this.currentWeapon, this.weapons[this.currentWeapon]);
 		this.weapons[this.currentWeapon].fire();
 	}

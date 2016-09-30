@@ -30,6 +30,7 @@ MainState.prototype.create = function() {
 	
 	this.heli = new Helicopter(this, this.levelConfig.weapons, 0);
 	this.heli.addEventListener(Unit.MOVED, this.panMapOnCameraMove, this);
+	this.heli.addEventListener(Unit.KILLED, this.onUnitKilled, this);
 	
 	this.camera.follow(this.heli.cont);
 	this.camera.deadzone = new Phaser.Rectangle(Game.safe_border, Game.safe_border, Game.width - Game.safe_border*2, Game.height - Game.safe_border*2);
@@ -46,6 +47,8 @@ MainState.prototype.create = function() {
 		enemy.addEventListener(Unit.KILLED, this.onUnitKilled, this);
 		this.aliens.push(enemy );
 	}
+	
+	this.endingLevel = false;
 }
 /*
  * @override
@@ -92,11 +95,12 @@ MainState.prototype.shutdown = function(event) {
  */
 
 MainState.prototype.endLevel = function(event) {
+	this.endingLevel = true;
 	setTimeout(function() {
 		//this.destroyChildren();
 		Game.currentLevel++;
-		this.state.start('LevelIntro', true, false, true);
-	}.bind(this), 1000);
+		this.state.start('LevelIntro', true, false, true, !this.heli.exists());
+	}.bind(this), 1500);
 }
 
 MainState.prototype.onKeyReleased = function(event) {
@@ -109,16 +113,16 @@ MainState.prototype.onKeyReleased = function(event) {
 }
 
 MainState.prototype.onUnitKilled = function(event) {
-	console.log("MainState.onUnitKilled", event);
+	if(Game.debug) console.log("MainState.onUnitKilled", event);
 	event.target.removeEventListener(Unit.KILLED, this.onUnitKilled, this);
 
-	var expl = this.game.add.image(0, 0, 'explosion1');
+	var expl = this.game.add.image(0, 0, 'explosion1', null, this.cont);
 	var anim = expl.animations.add('explosion');
 	expl.anchor.setTo(0.5, 0.5);
 	expl.x = event.target.cont.x;
 	expl.y = event.target.cont.y;
 	anim.onComplete.add(function() {
-		console.log("explosion anim.onComplete");
+		if(Game.debug) console.log("explosion anim.onComplete");
 		expl.destroy();
 	}, this);
 	anim.play();
@@ -131,7 +135,7 @@ MainState.prototype.onUnitKilled = function(event) {
 		}
 	});
 	
-	if(this.aliens.length <= 0) {
+	if(this.aliens.length <= 0 || !this.heli.exists()) {
 		this.endLevel();
 	}
 }

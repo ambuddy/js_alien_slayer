@@ -42,16 +42,16 @@ Unit.prototype.destroy = function() {
 
 
 Unit.prototype.damage = function(weapon, bullet) {
-	//console.log("Unit.prototype.damage 1", this);
+	//console.log("Unit.prototype.damage 1", bullet);
 	if(!this.cont || !this.exists() || this.life <=0 ) {
 		return;
 	}
-	//console.log("Unit.prototype.damage 2", this);
+	//console.log("Unit.prototype.damage 2", weapon.damage, bullet.traveled, weapon.distance);
 	var damage = weapon.damage;
 	if(weapon.weaken) {
 		damage = weapon.damage - weapon.damage * ( (bullet.traveled <= bullet.traveled / 5 ? 0 : bullet.traveled) / weapon.distance );
 	}
-	this.life -= Math.floor(damage);
+	this.life -= Math.floor(damage);	//console.log("Unit.prototype.damage 3", this.life);
 	if(this.life <= 0) {
 		this.kill();
 	}
@@ -131,6 +131,11 @@ Unit.prototype.angleBetween = function(cont, target) {
 	return this.game.math.radToDeg( this.game.physics.arcade.angleBetween(cont, target) );
 }
 
+Unit.prototype.distanceBetween = function(cont, target) {
+	//console.log("Unit.prototype.distanceBetween:", cont, target);
+	return this.game.physics.arcade.distanceBetween(cont, target);
+}
+
 Unit.prototype.isInsideWorld = function() {
 	var rectW = this.state.levelConfig.world[0];
 	var rectH = this.state.levelConfig.world[1];
@@ -143,8 +148,10 @@ Unit.prototype.isInsideSafe = function() {
 	return Game.isInside( this.cont, { x:Game.safe_border, y:Game.safe_border, width:rectW, height:rectH } );
 }
 
-/* Unit.prototype.isOverlap = function(cont, target) {
-	
-	return this.game.physics.arcade.overlap(cont, target);
-} */
+Unit.prototype.moveTo = function(target) {
+	var angle = Math.atan2((target.y - this.cont.y), (target.x - this.cont.x));
+	this.cont.x += this.speed * Math.cos(angle);
+	this.cont.y += this.speed * Math.sin(angle);
+}
+
 

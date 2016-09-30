@@ -17,10 +17,11 @@
 	},
 	
 	"levels" : [
-		{ "world":[1000, 1000],	"geo":[36.136817,-86.7350286],	"enemies":[1],		"enemiesNum":1,		"weapons":[1],			"briefing":"Allright, son. This is your very first try and you'll meet one of our friends from faraway." },
-		{ "world":[1000, 1000],	"geo":[33.3695756,-111.8192001],"enemies":[1,2],	"enemiesNum":3,		"weapons":[1,2,3],		"briefing":"Today, son, you will face a couple of those motherfuckers.\nPlease, don't fuck up your $1 mln helicopter." },
-		{ "world":[1600, 1600],	"geo":[33.8662537,-118.0994789],"enemies":[1,2,3],	"enemiesNum":10,	"weapons":[1,2,3,4],	"briefing":"Ok, %pilotName%y.\nToday will be your first real combat. Be prepared to kick some asses!" },
-		{ "world":[2000, 2000],	"geo":[36.117226,-115.1743284],	"enemies":[1,2,3],	"enemiesNum":30,	"weapons":[1,2,3,4,5],	"briefing":"Next morning, %pilotName%, you are going to Vegas! \nDon't lose too much money on massacre." }
+		{ "world":[1000, 1000],	"geo":[36.136817,-86.7350286],		"enemies":[1],		"enemiesNum":1,		"weapons":[1],			"briefing":"Allright, son. This is your very first try and you'll meet one of our friends from faraway." },
+		{ "world":[1000, 1000],	"geo":[25.7700661,-80.1313832],		"enemies":[1,2],	"enemiesNum":3,		"weapons":[1,2,3],		"briefing":"Today, son, you will face a couple of those motherfuckers in Miami Beach, FL.\nPlease, don't fuck up your $1 mln helicopter then." },
+		{ "world":[1600, 1600],	"geo":[40.6897208,-74.0454863],		"enemies":[1,2,3],	"enemiesNum":10,	"weapons":[1,2,3,4],	"briefing":"Oh, sweety, don't tell me you've never seen The Statue of Liberty. Welcome to NY!" },
+		{ "world":[2000, 2000],	"geo":[29.9323748,-90.070634,19],	"enemies":[1,2,3],	"enemiesNum":20,	"weapons":[1,2,3,4,5],	"briefing":"Ok, %pilotName%y, You are going to New Orleans in Louisiana. Be the strongest hurricane this state ever seen!" },
+		{ "world":[2000, 2000],	"geo":[34.4111702,-119.7000051],	"enemies":[1,2,3],	"enemiesNum":20,	"weapons":[1,2,3,4,5],	"briefing":"Oh my Gosh. Get ready to save C.C. Capwell's family in Santa Barbara, California" }
 	],
 	
 	"scripts" : [
@@ -40,8 +41,7 @@
 		"js/unit/Alien.js",
 		"js/unit/Helicopter.js",
 		"js/weapon/Weapon.js",
-		"js/weapon/Bullet.js",
-		"js/weapon/Rocket.js"
+		"js/weapon/Bullet.js"
 	],
 	
 	"resources" : [
