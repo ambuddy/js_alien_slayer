@@ -11,7 +11,8 @@ function MainState(map) {
 
 MainState.prototype = Object.create(State.prototype);
 MainState.prototype.constructor = MainState;
-/*
+
+/**
  * @override
  */
 MainState.prototype.create = function() {
@@ -31,12 +32,15 @@ MainState.prototype.create = function() {
 	this.heli = new Helicopter(this, this.levelConfig.weapons, 0);
 	this.heli.addEventListener(Unit.MOVED, this.panMapOnCameraMove, this);
 	this.heli.addEventListener(Unit.KILLED, this.onUnitKilled, this);
+	this.heli.addEventListener(Unit.SHOOT, this.onUnitShoot, this);
 	
 	this.camera.follow(this.heli.cont);
 	this.camera.deadzone = new Phaser.Rectangle(Game.safe_border, Game.safe_border, Game.width - Game.safe_border*2, Game.height - Game.safe_border*2);
 	this.camera.preXY = {x:0, y:0};
 	
 	this.sndExplosion1 = this.game.add.audio('explosion1');
+	
+	this.bullets = [];
 	
 	this.aliens = [];
 	var enemyType;
@@ -45,12 +49,13 @@ MainState.prototype.create = function() {
 		enemyType = this.levelConfig.enemies[ this.game.rnd.between(0, this.levelConfig.enemies.length-1) ];
 		enemy = new Alien(this, "alien"+enemyType);
 		enemy.addEventListener(Unit.KILLED, this.onUnitKilled, this);
-		this.aliens.push(enemy );
+		enemy.addEventListener(Unit.SHOOT, this.onUnitShoot, this);
+		this.aliens.push(enemy);
 	}
 	
 	this.endingLevel = false;
 }
-/*
+/**
  * @override
  */
 MainState.prototype.update = function() {
@@ -64,8 +69,18 @@ MainState.prototype.update = function() {
 			alien.update();
 		}
 	});
+	
+	//console.log("this.bullets.length", this.bullets.length);
+	this.bullets.forEach( function(bullet, i, arr) {
+		//console.log("bullet", bullet);
+		if(bullet.exists()) { 
+			bullet.update();
+		} else {
+			arr.splice(i, 1);
+		}
+	});
 }
-/*
+/**
  * @override
  */
 MainState.prototype.render = function() {
@@ -78,7 +93,7 @@ MainState.prototype.render = function() {
 		//dbg.text("angle: " + degToDir(angle) , 16, 48);
 	}
 }
-/*
+/**
  * @override
  */
 MainState.prototype.shutdown = function(event) {
@@ -89,7 +104,7 @@ MainState.prototype.shutdown = function(event) {
 	this.heli.removeEventListener(Unit.MOVED, this.panMapOnCameraMove, this);
 }
 
-/*
+/**
  * ===============================================
  * own methods : 
  */
@@ -116,8 +131,9 @@ MainState.prototype.onKeyReleased = function(event) {
 }
 
 MainState.prototype.onUnitKilled = function(event) {
-	//if(Game.debug) 
-	console.log("MainState.onUnitKilled", event);
+	
+	if(Game.debug) console.log("MainState.onUnitKilled", event);
+	
 	event.target.removeEventListener(Unit.KILLED, this.onUnitKilled, this);
 
 	var expl = this.game.add.image(0, 0, 'explosion1', null, this.cont);
@@ -142,6 +158,12 @@ MainState.prototype.onUnitKilled = function(event) {
 	if(this.aliens.length <= 0 || !this.heli.exists()) {
 		this.endLevel();
 	}
+}
+
+MainState.prototype.onUnitShoot = function(event) {
+	//console.log("MainState.onUnitShoot ", event, "this.bullets.length == "+this.bullets.length);
+	var bullet = event.weapon.createBullet(event.target)
+	this.bullets.push(bullet);
 }
 
 MainState.prototype.panMapOnCameraMove = function() {

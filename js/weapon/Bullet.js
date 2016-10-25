@@ -1,9 +1,9 @@
 ﻿
 function Bullet(state, shooter, weapon) {
-	
+	//console.log("new Bullet(", arguments, ")");
 	Unit.call(this, state);
 	
-	this.shooter = shooter;
+	this.shooter = shooter.cont;
 	this.weapon = weapon;
 	this.aliens = state.aliens;
 	this.heli = state.heli;
@@ -32,20 +32,19 @@ Bullet.prototype = Object.create(Unit.prototype);
 Bullet.prototype.constructor = Bullet;
 
 Bullet.prototype.update = function () {
-	
-	this.exists = this.cont.exists;
-	if(!this.exists) return;
+	//console.log("Bullet.prototype.update");
+	if(!this.exists()) return;
 	
 	this.anim.width += this.speed / 2;
 	this.anim.x += this.speed / 2;
 	this.hit.x += this.speed;
 	this.traveled += this.speed;
-		
+	
 	//console.log("overlap", this.game.physics.arcade.distanceBetween(this.hit, this.aliens[0].hit, true) );
 	
 	this.checkCollision();
 	
-	if(this.traveled > this.lifeDistance) {	
+	if(this.traveled > this.lifeDistance) {
 		this.destroy();
 	}
 }
@@ -75,7 +74,7 @@ Bullet.prototype.checkCollision = function () {
 }
 
 
-/*
+/**
  * @class Rocket
  * @extends Bullet
  */
@@ -101,8 +100,7 @@ Rocket.prototype.constructor = Bullet;
 
 Rocket.prototype.update = function () {
 	
-	this.exists = this.cont.exists;
-	if(!this.exists) return;
+	if(!this.exists()) return;
 	
 	this.anim.x += this.speed;
 	this.hit.x += this.speed;
@@ -115,7 +113,7 @@ Rocket.prototype.update = function () {
 	}
 }
 
-/*
+/**
  * @class Plasma
  * @extends Bullet
  */
@@ -133,8 +131,7 @@ Plasma.prototype.constructor = Bullet;
 
 Plasma.prototype.update = function () {
 	
-	this.exists = this.cont.exists;
-	if(!this.exists) return;
+	if(!this.exists()) return;
 	
 	this.anim.x += this.speed;
 	this.hit.x += this.speed;

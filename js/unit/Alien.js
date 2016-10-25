@@ -35,6 +35,8 @@ function Alien(state, type) {
 	this.addHitArea({width:50, height:50});
 	
 	this.addLifeBar();
+	
+	this.weapon.addEventListener(Weapon.SHOOT, this.onShoot, this);
 }
 
 Alien.prototype = Object.create(Unit.prototype);
@@ -54,7 +56,7 @@ Alien.prototype.update = function () {
 		}
 	}
 	
-	if(distToHeli < 800 && distToHeli > 50) {
+	if(distToHeli < 800 && distToHeli > 100) {
 		this.moveTo(this.heli.cont);
 	}
 	

@@ -1,7 +1,6 @@
 ﻿
 function start() {
 	//console.log("start");
-	//var config;
 	
 	function GetConfig() {
 		

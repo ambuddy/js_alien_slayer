@@ -7,7 +7,7 @@ function LevelIntro(map) {
 LevelIntro.prototype = Object.create(State.prototype);
 LevelIntro.prototype.constructor = LevelIntro;
 
-/*
+/**
  * @thisIsOutro:Boolean, if true this state is the End Level popup
  */
 LevelIntro.prototype.init = function(thisIsOutro, lose) {
@@ -84,7 +84,7 @@ LevelIntro.prototype.onAnyKey = function(event) {
 	}
 }
 
-/*
+/**
  * @override
  */
 LevelIntro.prototype.clear = function(event) {

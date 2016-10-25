@@ -10,11 +10,6 @@ PreloadState.prototype.preload = function () {
 	
 	var bg = this.add.tileSprite(0, 0, Game.width, Game.height, 'bg_pattern');
 	
-	/* var bg = this.add.graphics(0, 0);
-	bg.beginFill(0x8FA67B);
-	bg.drawRect(0, 0, Game.width, Game.height);
-	bg.endFill(); */
-	
 	var heli_vint = this.add.sprite(-53, -69, 'heli_vint');
 	heli_vint.animations.add('vint');
 	heli_vint.animations.play('vint', 30, true);

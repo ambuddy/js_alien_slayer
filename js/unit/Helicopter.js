@@ -45,6 +45,7 @@ function Helicopter(state, weapons, currentWeapon) {
 	//
 	this.weapons.forEach( function(weapon) {
 		this.ui.addEventListener(this.ui.MOUSE_RELEASED, weapon.onMouseRelease, weapon);
+		weapon.addEventListener(Weapon.SHOOT, this.onShoot, this);
 	}.bind(this) );
 	
 	this.addHitArea({width:40, height:40});
@@ -75,7 +76,7 @@ Helicopter.prototype.update = function () {
 	} );
 }
 
-/*
+/**
  * @weapons:Array - массив с номерами орудий
  */
 Helicopter.prototype.createWeapons = function(weapons) {

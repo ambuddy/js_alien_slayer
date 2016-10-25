@@ -18,6 +18,8 @@ function Weapon(state, shooter) {
 Weapon.prototype = Object.create(Unit.prototype);
 Weapon.prototype.constructor = Weapon;
 
+Weapon.SHOOT = "Weapon.SHOOT";
+
 Weapon.prototype.onMouseRelease = function(event) {
 	this.stop();
 }
@@ -26,13 +28,12 @@ Weapon.prototype.update = function () {
 	//console.log("Weapon.update", this.shooter.parentClass, this.game.time.now);
 	this.time = this.game.time.now;
 	
-	this.bullets.forEach( function(bullet, i) {
+	/* this.bullets.forEach( function(bullet, i) {
 		bullet.update();
 		if( ! bullet.exists ) {
 			this.bullets.splice(i, 1);
 		}
-	}.bind(this) );
-	
+	}.bind(this) ); */
 }
 
 Weapon.prototype.fire = function () {
@@ -52,13 +53,11 @@ Weapon.prototype.fireOnce = function () {
 	
 	if( Game.debug ) console.log("FIRE", this.shooter.parentClass);
 
-	var bullet = new Bullet(this.state, this.shooter, this);
-	
-	this.bullets.push(bullet);
+	this.dispatchEvent({type:Weapon.SHOOT, shooter:this.shooter, weapon:this});
+	//var bullet = new Bullet(this.state, this.shooter, this);
+	//this.state.bullets.push(bullet);
 	
 	if(!this.sounds.shot.isPlaying) this.sounds.shot.play("", 0, 0.1);
-	
-	//this.game.physics.enable( [ bullet.cont, this.state.aliens[0].cont ], Phaser.Physics.ARCADE);
 }
 
 Weapon.prototype.stop = function () {
@@ -68,11 +67,14 @@ Weapon.prototype.stop = function () {
 	}
 }
 
+Weapon.prototype.createBullet = function (shooter) {
+	return new Bullet(this.state, shooter, this);
+}
 
 /* ================================================ GUNS ================================================ */
 
 
-/*
+/**
  * Simple Gun
  */
 function Gun(state, shooter) {
@@ -93,7 +95,7 @@ function Gun(state, shooter) {
 Gun.prototype = Object.create(Weapon.prototype);
 Gun.prototype.constructor = Gun;
 
-/*
+/**
  * Automatic Gun
  */
 function AutomaticGun(state, shooter) {
@@ -115,7 +117,7 @@ AutomaticGun.prototype = Object.create(Weapon.prototype);
 AutomaticGun.prototype.constructor = AutomaticGun;
 
 
-/*
+/**
  * Machine Gun
  */
 function MachineGun(state, shooter) {
@@ -137,7 +139,7 @@ MachineGun.prototype = Object.create(Weapon.prototype);
 MachineGun.prototype.constructor = MachineGun;
 
 
-/*
+/**
  * RocketLauncher
  */
 function RocketLauncher(state, shooter) {
@@ -163,15 +165,19 @@ RocketLauncher.prototype.constructor = RocketLauncher;
 RocketLauncher.prototype.fireOnce = function () {
 	
 	if( Game.debug ) console.log("FIRE");
-
-	var bullet = new Rocket(this.state, this.shooter, this);
 	
-	this.bullets.push(bullet);
+	this.dispatchEvent({type:Weapon.SHOOT, shooter:this.shooter, weapon:this});
+	//var bullet = new Rocket(this.state, this.shooter, this);
+	//this.bullets.push(bullet);
 	
 	this.sounds.shot.play("", 0, 0.1);
 }
 
-/*
+RocketLauncher.prototype.createBullet = function (shooter) {
+	return new Rocket(this.state, shooter, this);
+}
+
+/**
  * Rocket Launcher Autofire
  */
 function RocketLauncherAuto(state, shooter) {
@@ -191,7 +197,7 @@ RocketLauncherAuto.prototype.constructor = RocketLauncherAuto;
 
 
 
-/*
+/**
  * Plasma Gun
  */
 function PlasmaGun(state, shooter) {
@@ -205,10 +211,10 @@ function PlasmaGun(state, shooter) {
 	this.razbrosX = 100;		// разброс по дальности;
 	this.damage = 5;
 	
-	if(Game.currentLevel <= 2) {
+	/* if(Game.currentLevel <= 2) {
 		this.fireRate = 600;
 		this.damage = 2;
-	}
+	} */
 	
 	this.sounds = {
 		shot: this.game.add.audio('gun')
@@ -221,9 +227,13 @@ PlasmaGun.prototype.fireOnce = function () {
 	
 	if( Game.debug ) console.log("Alien FIRE");
 
-	var bullet = new Plasma(this.state, this.shooter, this);
-	
-	this.bullets.push(bullet);
+	this.dispatchEvent({type:Weapon.SHOOT, shooter:this.shooter, weapon:this});
+	//var bullet = new Plasma(this.state, this.shooter, this);
+	//this.bullets.push(bullet);
 	
 	this.sounds.shot.play("", 0, 0.1);
+}
+
+PlasmaGun.prototype.createBullet = function (shooter) {
+	return new Plasma(this.state, shooter, this);
 }

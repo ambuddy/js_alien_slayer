@@ -13,12 +13,13 @@ function Unit(state) {
 Unit.prototype = Object.create(EventDispatcher.prototype);
 Unit.prototype.constructor = Unit;
 
-Unit.DESTROYED = "DESTROYED";
-Unit.KILLED = "KILLED";
-Unit.MOVED = "MOVED";
+Unit.DESTROYED = "Unit.DESTROYED";
+Unit.KILLED = "Unit.KILLED";
+Unit.MOVED = "Unit.MOVED";
+Unit.SHOOT = "Unit.SHOOT";
 
 Unit.prototype.exists = function() {
-	if(this.cont) return this.cont.exists;
+	if(this.cont) return this.cont.exists;			// Phaser: calling game objects' destroy() method makes their prop @exists = false;
 }
 Unit.prototype.kill = function() {
 	if(this.cont) this.cont.destroy();
@@ -26,6 +27,7 @@ Unit.prototype.kill = function() {
 	this.dispatchEvent({type:Unit.KILLED});
 }
 Unit.prototype.destroy = function() {
+	
 	if(this.cont) {
 		this.cont.destroy();
 	}
@@ -55,6 +57,11 @@ Unit.prototype.damage = function(weapon, bullet) {
 	if(this.life <= 0) {
 		this.kill();
 	}
+}
+
+Unit.prototype.onShoot = function(event) {
+	//console.log("Unit.prototype.onShoot", this);
+	this.dispatchEvent({type:Unit.SHOOT, weapon:event.target});
 }
 
 Unit.prototype.updateLifeBar = function() {
