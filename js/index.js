@@ -7,7 +7,7 @@ function start() {
 		
 		var counter = 0;
 		
-		function getJSON() {
+		/* function getJSON() {
 			//console.log("GetConfig.getJSON");
 			return new Promise( function(resolve, reject) {
 				var xhr = new XMLHttpRequest();
@@ -19,7 +19,7 @@ function start() {
 				};
 				xhr.send();
 			});
-		}
+		} */
 	
 		function settleScripts(configJSON) {
 			if( configJSON.configs.debug ) console.log("GetConfig.settleScripts");
@@ -47,7 +47,8 @@ function start() {
 		}
 		
 		return new Promise( function(resolve, reject) {
-			getJSON()
+			fetch("config.json?r="+Math.random())
+				.then(response => { return response.json(); })
 				.then(settleScripts, reject)
 				.then(getFirstElem, reject)
 				.then(resolve, reject);

@@ -35,6 +35,12 @@ PreloadState.prototype.preload = function () {
 	
 	// ------------------------------
 	var ls = LocalStorage();
+	
+	var query = window.location.search.substring(1);
+	if(query === "reset") {
+		ls.clear();
+	}
+	
 	//ls.removeItem('name');
 	if( !ls.get('name') ) {
 		var prompt = window.prompt("Welcome to NAVY, son. Enter name your here: ");

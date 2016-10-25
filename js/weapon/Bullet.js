@@ -54,7 +54,6 @@ Bullet.prototype.checkCollision = function () {
 		
 	this.aliens.forEach( function(alien) {
 		
-		
 		// стреляют наши
 		if( this.shooter == this.heli.cont) {
 			if( Game.hitTestRectangle( this.hit, alien.hit ) && alien.exists() ) {

@@ -126,6 +126,9 @@ function LocalStorage() {
 	function removeItem(key) {
 		localStorage.removeItem(key);
 	};
-	return { get: get, save: save, getObject: getObject, saveObject: saveObject, removeItem: removeItem };
+	function clear() {
+		localStorage.clear();
+	};
+	return { get: get, save: save, getObject: getObject, saveObject: saveObject, removeItem: removeItem, clear:clear };
 }
 
